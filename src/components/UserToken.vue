@@ -23,7 +23,7 @@
 <script>
   import Vue from 'vue';
   import {MdField, MdButton, MdSnackbar} from 'vue-material/dist/components';
-  import axios from "axios";
+  import axios from 'axios';
 
   Vue.use(MdField);
   Vue.use(MdButton);
@@ -33,7 +33,6 @@
     name: 'UserToken',
     data: () => ({
       showError: false,
-      graphs: [],
     }),
     computed: {
       username: {
@@ -56,10 +55,11 @@
     methods: {
       async authentication() {
         try {
-          let res = await axios.get("https://pixe.la/v1/users/" + this.$store.state.username + "/graphs",
+          const res = await axios.get('https://pixe.la/v1/users/' + this.$store.state.username + '/graphs',
             {headers: {'X-USER-TOKEN': this.$store.state.token}});
-          console.log(res);
+          this.$store.commit('setGraphs', res.data.graphs);
           this.showError = false;
+          this.$router.push('/graphs');
         } catch (e) {
           this.showError = true;
         }
