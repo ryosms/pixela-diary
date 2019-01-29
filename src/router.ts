@@ -26,5 +26,10 @@ export default new Router({
       name: 'graph',
       component: () => import('./views/GraphList.vue'),
     },
+    {
+      path: '/graphs/:graph_id',
+      name: 'diary',
+      component: () => import('./views/EditDiary.vue'),
+    },
   ],
 });
