@@ -1,5 +1,10 @@
 <template>
-  <md-list>
+  <md-empty-state v-if="this.$store.state.graphs.length === 0"
+                  class="md-accent"
+                  md-label="No Graphs." md-icon="notification_important"
+                  md-description="First, create your graph to keep a diary.">
+  </md-empty-state>
+  <md-list v-else>
     <GraphListItem v-for="graph in this.$store.state.graphs"
                    :key="graph.id" v-bind:graph="graph"/>
   </md-list>
@@ -7,10 +12,11 @@
 
 <script>
   import Vue from 'vue';
-  import {MdList} from 'vue-material/dist/components';
+  import {MdList, MdEmptyState} from 'vue-material/dist/components';
   import GraphListItem from '@/components/GraphListItem.vue';
 
   Vue.use(MdList);
+  Vue.use(MdEmptyState);
 
   export default {
     name: 'GraphList',
