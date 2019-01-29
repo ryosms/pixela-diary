@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/">
+  <router-link v-bind:to="{name: 'diary', params: {graph_id: graph.id}}">
     <md-list-item @click="noAction">
       <div class="md-list-item-text">
         {{ graph.name }}
@@ -22,7 +22,7 @@
     methods: {
       noAction() {/* empty! */
       },
-    }
+    },
   };
 </script>
 
