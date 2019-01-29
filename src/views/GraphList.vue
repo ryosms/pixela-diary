@@ -15,7 +15,7 @@
   export default {
     name: 'GraphList',
     created() {
-      if (this.$store.state.graphs.length === 0) {
+      if (!this.$store.state.username || !this.$store.state.token) {
         this.$router.replace('/');
       }
     },
