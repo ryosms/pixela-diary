@@ -23,16 +23,17 @@
     async created() {
       if (!this.$store.state.username || !this.$store.state.token) {
         this.$router.replace('/');
+        return;
       }
       this.diaryDate = new Date(Date.now());
-      for (let i in this.$store.state.graphs) {
-        let g = this.$store.state.graphs[i];
-        if(g.id === this.$route.params.graph_id) {
+      for (const i of this.$store.state.graphs.keys()) {
+        const g = this.$store.state.graphs[i];
+        if (g.id === this.$route.params.graph_id) {
           this.graph = g;
           return;
         }
       }
-      this.$router.replace('/graphs')
+      this.$router.replace('/graphs');
     },
   };
 </script>
