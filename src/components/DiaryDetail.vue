@@ -7,11 +7,11 @@
       </md-field>
       <md-field class="md-layout-item md-size-100">
         <label>Body</label>
-        <md-textarea v-model="body" md-autogrow></md-textarea>
+        <md-textarea v-model="body"></md-textarea>
       </md-field>
     </md-card-content>
     <md-card-actions>
-      <md-button class="md-primary" :disabled="!canEdit">Save</md-button>
+      <md-button class="md-primary" :disabled="!canEdit" @click="saveDiary">Save</md-button>
     </md-card-actions>
   </md-card>
 </template>
@@ -88,6 +88,19 @@
         } catch (ignore) {
           this.title = '';
           this.body = '';
+        }
+      },
+      saveDiary() {
+        const optionalData = {"title": this.title, "body": this.body};
+        const url = 'https://pixe.la/v1/users/' + this.username
+          + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
+        const headers = {
+          'X-USER-TOKEN': this.token,
+        };
+        console.log(JSON.stringify(optionalData));
+        try {
+          axios.put(url, {"quantity": "1", "optionalData": JSON.stringify(optionalData)}, {headers: headers});
+        } catch(error) {
         }
       },
     },
