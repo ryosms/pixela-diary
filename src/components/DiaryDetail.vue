@@ -38,6 +38,7 @@
           return !this.hasError;
         },
         set(ignore) {
+          // unnecessary setter
         },
       },
     },
@@ -66,14 +67,14 @@
           + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
         const headers = {
           'X-USER-TOKEN': this.token,
-          'accept': 'application/json'
+          'accept': 'application/json',
         };
-        axios.get(url, {headers: headers})
-          .then(function (response) {
+        axios.get(url, {headers})
+          .then((response) => {
             self.hasError = false;
             self.parseOptionalData(response.data.optionalData);
           })
-          .catch(error => {
+          .catch((error) => {
             // FIXME: in case of 404, pixela don't return CORS headers.
             // self.hasError = (!error.response || error.response.status !== 404);
             self.title = '';
@@ -91,16 +92,16 @@
         }
       },
       saveDiary() {
-        const optionalData = {"title": this.title, "body": this.body};
+        const optionalData = {title: this.title, body: this.body};
         const url = 'https://pixe.la/v1/users/' + this.username
           + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
         const headers = {
           'X-USER-TOKEN': this.token,
         };
-        console.log(JSON.stringify(optionalData));
         try {
-          axios.put(url, {"quantity": "1", "optionalData": JSON.stringify(optionalData)}, {headers: headers});
-        } catch(error) {
+          axios.put(url, {quantity: '1', optionalData: JSON.stringify(optionalData)}, {headers});
+        } catch (error) {
+          // エラーハンドリングしなきゃ
         }
       },
     },
