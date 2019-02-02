@@ -43,6 +43,7 @@
       },
     },
     data: () => ({
+      quantity: '',
       title: 'title',
       body: 'body',
       hasError: false,
@@ -72,11 +73,13 @@
         axios.get(url, {headers})
           .then((response) => {
             self.hasError = false;
+            self.quantity = response.data.quantity;
             self.parseOptionalData(response.data.optionalData);
           })
           .catch((error) => {
             // FIXME: in case of 404, pixela don't return CORS headers.
             // self.hasError = (!error.response || error.response.status !== 404);
+            self.quantity = '';
             self.title = '';
             self.body = '';
           });
@@ -92,14 +95,17 @@
         }
       },
       saveDiary() {
+        const diary = this.quantity ? this.quantity : '1';
+        console.log(diary);
         const optionalData = {title: this.title, body: this.body};
         const url = 'https://pixe.la/v1/users/' + this.username
           + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
+        console.log(url);
         const headers = {
           'X-USER-TOKEN': this.token,
         };
         try {
-          axios.put(url, {quantity: '1', optionalData: JSON.stringify(optionalData)}, {headers});
+          axios.put(url, {quantity: diary, optionalData: JSON.stringify(optionalData)}, {headers});
         } catch (error) {
           // エラーハンドリングしなきゃ
         }
