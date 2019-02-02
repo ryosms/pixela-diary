@@ -1,20 +1,29 @@
 <template>
-  <md-card>
-    <md-card-content class="md-layout">
-      <md-field class="md-layout-item md-size-50 md-small-size-100">
-        <label>Title</label>
-        <md-input v-model="title"></md-input>
-      </md-field>
-      <md-field class="md-layout-item md-size-100">
-        <label>Body</label>
-        <md-textarea v-model="body"></md-textarea>
-      </md-field>
-    </md-card-content>
-    <md-card-actions>
-      <md-button class="md-accent" v-if="quantity" @click="deleteDiary">Delete</md-button>
-      <md-button class="md-primary" :disabled="!canEdit" @click="saveDiary">Save</md-button>
-    </md-card-actions>
-  </md-card>
+  <div>
+    <md-card>
+      <md-card-content class="md-layout">
+        <md-field class="md-layout-item md-size-50 md-small-size-100">
+          <label>Title</label>
+          <md-input v-model="title"></md-input>
+        </md-field>
+        <md-field class="md-layout-item md-size-100">
+          <label>Body</label>
+          <md-textarea v-model="body"></md-textarea>
+        </md-field>
+      </md-card-content>
+      <md-card-actions>
+        <md-button class="md-accent" v-if="quantity" @click="deleteDiary">Delete</md-button>
+        <md-button class="md-primary" :disabled="!canEdit" @click="saveDiary">Save</md-button>
+      </md-card-actions>
+    </md-card>
+
+    <md-snackbar md-position="center" :md-duration="3000" :md-active.sync="showErrorMessage">
+      <span>Something went wrong...</span>
+    </md-snackbar>
+    <md-snackbar md-position="center" :md-duration="3000" :md-active.sync="showCompleteMessage">
+      <span>Completed!</span>
+    </md-snackbar>
+  </div>
 </template>
 
 <script>
@@ -24,6 +33,8 @@
 
   Vue.use(MdCard);
   Vue.use(MdField);
+  Vue.use(MdButton);
+  Vue.use(MdSnackbar);
 
   export default {
     name: 'DiaryDetail',
@@ -48,6 +59,8 @@
       title: 'title',
       body: 'body',
       hasError: false,
+      showErrorMessage: false,
+      showCompleteMessage: false,
     }),
     methods: {
       isDateChanged(newDate, oldDate) {
@@ -103,12 +116,14 @@
         const headers = {
           'X-USER-TOKEN': this.token,
         };
-        try {
-          axios.put(url, {quantity: diary, optionalData: JSON.stringify(optionalData)}, {headers});
-          this.quantity = diary;
-        } catch (error) {
-          // エラーハンドリングしなきゃ
-        }
+        axios.put(url, {quantity: diary, optionalData: JSON.stringify(optionalData)}, {headers})
+          .then((ignore) => {
+            this.quantity = diary;
+            this.showCompleteMessage = true;
+          })
+          .catch((ignore) => {
+            this.showErrorMessage = true;
+          });
       },
       deleteDiary() {
         if (!confirm('Are you sure?')) {
@@ -119,14 +134,15 @@
         const headers = {
           'X-USER-TOKEN': this.token,
         };
-        try {
-          axios.delete(url, {headers});
+        axios.delete(url, {headers}).then((ignore) => {
           this.quantity = '';
           this.title = '';
           this.body = '';
-        } catch (error) {
-          // エラーハンドリングしなきゃ
-        }
+          this.showCompleteMessage = true;
+        })
+          .catch((ignore) => {
+            this.showErrorMessage = true;
+          });
       },
     },
     created() {
