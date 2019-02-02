@@ -12,7 +12,7 @@
         </md-field>
       </md-card-content>
       <md-card-actions>
-        <md-button class="md-accent" v-if="quantity" @click="deleteDiary">Delete</md-button>
+        <md-button class="md-accent" v-if="quantity" @click="showConfirm=true">Delete</md-button>
         <md-button class="md-primary" :disabled="!canEdit" @click="saveDiary">Save</md-button>
       </md-card-actions>
     </md-card>
@@ -23,18 +23,27 @@
     <md-snackbar md-position="center" :md-duration="3000" :md-active.sync="showCompleteMessage">
       <span>Completed!</span>
     </md-snackbar>
+
+    <md-dialog-confirm
+        :md-active.sync="showConfirm"
+        md-title="Are you sure?"
+        md-content="Do you want to delete diary?"
+        md-confirm-text="Delete!"
+        md-cancel-text="Cancel"
+        @md-confirm="deleteDiary"/>
   </div>
 </template>
 
 <script>
   import Vue from 'vue';
-  import {MdCard, MdField, MdButton, MdSnackbar, MdProgress} from 'vue-material/dist/components';
+  import {MdCard, MdField, MdButton, MdSnackbar, MdDialogConfirm} from 'vue-material/dist/components';
   import axios from 'axios';
 
   Vue.use(MdCard);
   Vue.use(MdField);
   Vue.use(MdButton);
   Vue.use(MdSnackbar);
+  Vue.use(MdDialogConfirm);
 
   export default {
     name: 'DiaryDetail',
@@ -61,6 +70,7 @@
       hasError: false,
       showErrorMessage: false,
       showCompleteMessage: false,
+      showConfirm: false,
     }),
     methods: {
       isDateChanged(newDate, oldDate) {
@@ -126,9 +136,6 @@
           });
       },
       deleteDiary() {
-        if (!confirm('Are you sure?')) {
-          return;
-        }
         const url = 'https://pixe.la/v1/users/' + this.username
           + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
         const headers = {
