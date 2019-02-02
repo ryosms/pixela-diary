@@ -58,7 +58,7 @@
       },
       formatDiaryDate(diaryDate) {
         return diaryDate.getFullYear()
-          + ('0' + diaryDate.getMonth() + 1).slice(-2)
+          + ('0' + (diaryDate.getMonth() + 1)).slice(-2)
           + ('0' + diaryDate.getDate()).slice(-2);
       },
       loadDiary() {
