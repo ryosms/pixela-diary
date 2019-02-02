@@ -11,6 +11,7 @@
       </md-field>
     </md-card-content>
     <md-card-actions>
+      <md-button class="md-accent" v-if="quantity" @click="deleteDiary">Delete</md-button>
       <md-button class="md-primary" :disabled="!canEdit" @click="saveDiary">Save</md-button>
     </md-card-actions>
   </md-card>
@@ -96,16 +97,33 @@
       },
       saveDiary() {
         const diary = this.quantity ? this.quantity : '1';
-        console.log(diary);
         const optionalData = {title: this.title, body: this.body};
         const url = 'https://pixe.la/v1/users/' + this.username
           + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
-        console.log(url);
         const headers = {
           'X-USER-TOKEN': this.token,
         };
         try {
           axios.put(url, {quantity: diary, optionalData: JSON.stringify(optionalData)}, {headers});
+          this.quantity = diary;
+        } catch (error) {
+          // エラーハンドリングしなきゃ
+        }
+      },
+      deleteDiary() {
+        if (!confirm('Are you sure?')) {
+          return;
+        }
+        const url = 'https://pixe.la/v1/users/' + this.username
+          + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
+        const headers = {
+          'X-USER-TOKEN': this.token,
+        };
+        try {
+          axios.delete(url, {headers});
+          this.quantity = '';
+          this.title = '';
+          this.body = '';
         } catch (error) {
           // エラーハンドリングしなきゃ
         }
