@@ -1,12 +1,12 @@
 <template>
-  <router-link v-bind:to="{name: 'diary', params: {graph_id: graph.id}}">
-    <md-list-item @click="noAction">
+  <div>
+    <md-list-item @click="goEditPage">
       <div class="md-list-item-text">
         {{ graph.name }}
       </div>
     </md-list-item>
     <md-divider></md-divider>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -20,7 +20,10 @@
     name: 'GraphListItem',
     props: ['graph'],
     methods: {
-      noAction() {/* empty! */
+      goEditPage() {
+        console.log(this.graph);
+        this.$store.commit('setGraph', this.graph);
+        this.$router.push('/graphs/diary');
       },
     },
   };

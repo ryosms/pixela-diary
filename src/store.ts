@@ -7,6 +7,7 @@ interface State {
   username: string;
   token: string;
   graphs: object[];
+  graph: any;
 }
 
 export default new Vuex.Store({
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     username: '',
     token: '',
     graphs: [],
+    graph: null,
   } as State,
   mutations: {
     setUsername(state: State, newValue: string) {
@@ -28,6 +30,9 @@ export default new Vuex.Store({
       } else {
         state.graphs = graphs;
       }
+    },
+    setGraph(state: State, graph: any) {
+      state.graph = graph;
     },
   },
   actions: {},
