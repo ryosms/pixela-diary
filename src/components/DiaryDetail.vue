@@ -65,8 +65,8 @@
     },
     data: () => ({
       quantity: '',
-      title: 'title',
-      body: 'body',
+      title: '',
+      body: '',
       hasError: false,
       showErrorMessage: false,
       showCompleteMessage: false,
