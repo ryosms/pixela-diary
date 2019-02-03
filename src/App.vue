@@ -13,6 +13,10 @@
         </md-app-content>
       </md-app>
     </div>
+    <footer class="main-footer">
+      &copy;2019 &nbsp;
+      <a href="https://twitter.com/ryosms" target="_blank">@ryosms</a>
+    </footer>
   </div>
 </template>
 
@@ -36,9 +40,26 @@
   .md-app-toolbar {
     a {
       color: white !important;
+
       &:hover {
         text-decoration: none;
       }
     }
+  }
+
+  #app {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  .page-container {
+    flex-grow: 1
+  }
+
+  .main-footer {
+    display: flex;
+    background-color: #EEE;
+    padding: 10px 16px;
+    justify-content: center;
   }
 </style>
