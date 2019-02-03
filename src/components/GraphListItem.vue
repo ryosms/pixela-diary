@@ -21,9 +21,8 @@
     props: ['graph'],
     methods: {
       goEditPage() {
-        console.log(this.graph);
         this.$store.commit('setGraph', this.graph);
-        this.$router.push('/graphs/diary');
+        this.$router.push({name: 'diary'});
       },
     },
   };

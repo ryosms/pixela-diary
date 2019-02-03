@@ -27,7 +27,7 @@ export default new Router({
       component: () => import('./views/GraphList.vue'),
     },
     {
-      path: '/graphs/diary',
+      path: '/diary',
       name: 'diary',
       component: () => import('./views/EditDiary.vue'),
     },
