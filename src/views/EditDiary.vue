@@ -2,21 +2,20 @@
   <div v-if="this.$store.state.graph">
     <span class="md-title">{{ this.$store.state.graph.name }}</span>
     <div class="md-layout">
-      <div class="md-layout-item md-size-50 md-xsmall-size-100">
-        <md-datepicker v-model="diaryDate" md-immediately>
-          <label>diary date</label>
-        </md-datepicker>
-        <DiaryDetail v-bind:diary-date="diaryDate"
-                     v-bind:graphId="this.$store.state.graph.id"
-                     v-bind:username="this.$store.state.username"
-                     v-bind:token="this.$store.state.token"/>
-      </div>
-      <div class="md-layout-item md-size-50 md-xsmall-hide">
+      <md-datepicker v-model="diaryDate" md-immediately
+                     class="md-layout-item md-size-30 md-small-size-100">
+        <label>diary date</label>
+      </md-datepicker>
+      <div class="md-layout-item md-size-50 md-small-100">
         <PixelaGraph v-model="diaryDate"
                      :username="this.$store.state.username"
-                     :graphId="this.$store.state.graph.id" />
+                     :graphId="this.$store.state.graph.id"/>
       </div>
     </div>
+    <DiaryDetail v-bind:diary-date="diaryDate"
+                 v-bind:graphId="this.$store.state.graph.id"
+                 v-bind:username="this.$store.state.username"
+                 v-bind:token="this.$store.state.token"/>
   </div>
 </template>
 
