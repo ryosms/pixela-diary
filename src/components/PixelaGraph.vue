@@ -1,5 +1,7 @@
 <template>
-  <div v-if="svg" v-html="svg"></div>
+  <div v-if="svg">
+    <div v-html="svg"></div>
+  </div>
 </template>
 
 <script>
@@ -15,6 +17,7 @@
     data: () => ({
       graphDate: new Date(Date.now()),
       svg: '',
+      tooltipMessage: '',
     }),
     created() {
       this.loadSvg();
@@ -32,14 +35,17 @@
         axios.get(url, {params}).then((response) => {
           this.svg = response.data;
         }).then((ignore) => {
-          this.setClickEvent();
+          this.setPixelEvent();
         });
       },
-      setClickEvent() {
+      setPixelEvent() {
         const self = this;
         const pixels = document.querySelectorAll('.each-day');
         for (let i = 0; i < pixels.length; i++) {
-          pixels[i].addEventListener('click', function() { self.pixelClicked(this);});
+          const pixel = pixels[i];
+          pixel.addEventListener('click', function () {
+            self.pixelClicked(this);
+          });
         }
       },
       pixelClicked(pixel) {
