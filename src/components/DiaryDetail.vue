@@ -2,7 +2,7 @@
   <div>
     <md-card>
       <md-card-content class="md-layout">
-        <md-field class="md-layout-item md-size-50 md-small-size-100">
+        <md-field class="md-layout-item md-size-75 md-small-size-100">
           <label>Title</label>
           <md-input v-model="title"></md-input>
         </md-field>
