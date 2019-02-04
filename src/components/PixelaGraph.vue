@@ -1,11 +1,11 @@
 <template>
-  <div v-if="svg">
-    <div v-html="svg"></div>
-  </div>
+  <div v-if="svg" v-html="svg"></div>
 </template>
 
 <script>
   import axios from 'axios';
+  import tippy from 'tippy.js';
+  import 'tippy.js/dist/tippy.css';
 
   export default {
     name: "PixelaGraph",
@@ -17,7 +17,6 @@
     data: () => ({
       graphDate: new Date(Date.now()),
       svg: '',
-      tooltipMessage: '',
     }),
     created() {
       this.loadSvg();
@@ -41,6 +40,7 @@
       setPixelEvent() {
         const self = this;
         const pixels = document.querySelectorAll('.each-day');
+        tippy(pixels);
         for (let i = 0; i < pixels.length; i++) {
           const pixel = pixels[i];
           pixel.addEventListener('click', function () {
