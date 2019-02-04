@@ -1,11 +1,26 @@
 <template>
-  <div v-if="svg" v-html="svg"></div>
+  <div v-if="svg" class="md-layout">
+    <div v-html="svg" class="md-layout-item md-size-100"></div>
+    <span class="md-layout-item md-size-10"></span>
+    <MdButton class="md-layout-item md-size-10 md-primary" @click="changeGraphDate(-30)">
+      <md-icon class="md-size-2x">replay_30</md-icon>
+    </MdButton>
+    <div class="md-layout-item md-size-55">
+    </div>
+    <MdButton class="md-layout-item md-size-10 md-primary" @click="changeGraphDate(30)">
+      <md-icon class="md-size-2x">forward_30</md-icon>
+    </MdButton>
+  </div>
 </template>
 
 <script>
+  import Vue from 'vue';
+  import {MdButton} from 'vue-material/dist/components';
   import axios from 'axios';
   import tippy from 'tippy.js';
   import 'tippy.js/dist/tippy.css';
+
+  Vue.use(MdButton);
 
   export default {
     name: "PixelaGraph",
@@ -59,8 +74,11 @@
           pixels[i].classList.remove('active');
         }
       },
+      changeGraphDate(days) {
+        this.graphDate.setDate(this.graphDate.getDate() + days);
+        this.loadSvg();
+      },
     }
-
   }
 </script>
 
