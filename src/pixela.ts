@@ -101,4 +101,18 @@ export class Pixela {
       return null;
     }
   }
+
+  public async deletePixel(graphId: string, pixelDate: Date) {
+    const targetDate = Pixela.formatDateString(pixelDate);
+    const url = `${Pixela.ENDPOINT}/users/${this.username}/graphs/${graphId}/${targetDate}`;
+    const headers = {
+      'X-USER-TOKEN': this.token,
+    };
+    try {
+      await axios.delete(url, {headers});
+      return true;
+    } catch (ignore) {
+      return false;
+    }
+  }
 }

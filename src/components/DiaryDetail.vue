@@ -37,7 +37,6 @@
 <script>
   import Vue from 'vue';
   import {MdCard, MdField, MdButton, MdSnackbar, MdDialogConfirm} from 'vue-material/dist/components';
-  import axios from 'axios';
   import {Pixela} from '@/pixela';
 
   Vue.use(MdCard);
@@ -85,11 +84,6 @@
           && newDate.getMonth() === oldDate.getMonth()
           && newDate.getDate() === oldDate.getDate());
       },
-      formatDiaryDate(diaryDate) {
-        return diaryDate.getFullYear()
-          + ('0' + (diaryDate.getMonth() + 1)).slice(-2)
-          + ('0' + diaryDate.getDate()).slice(-2);
-      },
       async loadDiary() {
         this.pixel = {quantity: '', title: '', body: ''};
         const res = await this.pixela.loadPixel(this.graphId, this.diaryDate);
@@ -108,19 +102,14 @@
           this.showCompleteMessage = true;
         }
       },
-      deleteDiary() {
-        const url = 'https://pixe.la/v1/users/' + this.username
-          + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
-        const headers = {
-          'X-USER-TOKEN': this.token,
-        };
-        axios.delete(url, {headers}).then((ignore) => {
+      async deleteDiary() {
+        const res = await this.pixela.deletePixel(this.graphId, this.diaryDate);
+        if (res) {
           this.pixel = {quantity: '', title: '', body: ''};
           this.showCompleteMessage = true;
-        })
-          .catch((ignore) => {
-            this.showErrorMessage = true;
-          });
+        } else {
+          this.showErrorMessage = true;
+        }
       },
     },
     watch: {
