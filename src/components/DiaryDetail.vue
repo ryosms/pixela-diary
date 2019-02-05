@@ -4,15 +4,15 @@
       <md-card-content class="md-layout">
         <md-field class="md-layout-item md-size-75 md-small-size-100">
           <label>Title</label>
-          <md-input v-model="title"></md-input>
+          <md-input v-model="pixel.title"></md-input>
         </md-field>
         <md-field class="md-layout-item md-size-100">
           <label>Body</label>
-          <md-textarea v-model="body"></md-textarea>
+          <md-textarea v-model="pixel.body"></md-textarea>
         </md-field>
       </md-card-content>
       <md-card-actions>
-        <md-button class="md-accent" v-if="quantity" @click="showConfirm=true">Delete</md-button>
+        <md-button class="md-accent" v-if="pixel.quantity" @click="showConfirm=true">Delete</md-button>
         <md-button class="md-primary" :disabled="!canEdit" @click="saveDiary">Save</md-button>
       </md-card-actions>
     </md-card>
@@ -65,9 +65,7 @@
       },
     },
     data: () => ({
-      quantity: '',
-      title: '',
-      body: '',
+      pixel: {quantity: '', title: '', body: ''},
       hasError: false,
       showErrorMessage: false,
       showCompleteMessage: false,
@@ -93,21 +91,17 @@
           + ('0' + diaryDate.getDate()).slice(-2);
       },
       async loadDiary() {
-        this.quantity = '';
-        this.title = '';
-        this.body = '';
+        this.pixel = {quantity: '', title: '', body: ''};
         const res = await this.pixela.loadPixel(this.graphId, this.diaryDate);
         // FIXME: in case of 404, pixela don't return CORS headers.
         // this.hasError = !res;
         if (!!res) {
-          this.quantity = res.quantity;
-          this.title = res.title;
-          this.body = res.body;
+          this.pixel = res;
         }
       },
       saveDiary() {
-        const diary = this.quantity ? this.quantity : '1';
-        const optionalData = {title: this.title, body: this.body};
+        const diary = this.pixel.quantity ? this.pixel.quantity : '1';
+        const optionalData = {title: this.pixel.title, body: this.pixel.body};
         const url = 'https://pixe.la/v1/users/' + this.username
           + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
         const headers = {
@@ -129,9 +123,7 @@
           'X-USER-TOKEN': this.token,
         };
         axios.delete(url, {headers}).then((ignore) => {
-          this.quantity = '';
-          this.title = '';
-          this.body = '';
+          this.pixel = {quantity: '', title: '', body: ''};
           this.showCompleteMessage = true;
         })
           .catch((ignore) => {
