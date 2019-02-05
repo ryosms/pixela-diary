@@ -38,6 +38,7 @@
   import Vue from 'vue';
   import {MdCard, MdField, MdButton, MdSnackbar, MdDialogConfirm} from 'vue-material/dist/components';
   import axios from 'axios';
+  import {Pixela} from '@/pixela';
 
   Vue.use(MdCard);
   Vue.use(MdField);
@@ -59,7 +60,7 @@
           return !this.hasError;
         },
         set(ignore) {
-          // unnecessary setter
+          // setter is unnecessary, but add to calm down linter
         },
       },
     },
@@ -71,7 +72,12 @@
       showErrorMessage: false,
       showCompleteMessage: false,
       showConfirm: false,
+      pixela: null,
     }),
+    created() {
+      this.pixela = new Pixela(this.username, this.token);
+      this.loadDiary();
+    },
     methods: {
       isDateChanged(newDate, oldDate) {
         if (!oldDate) {
@@ -86,36 +92,17 @@
           + ('0' + (diaryDate.getMonth() + 1)).slice(-2)
           + ('0' + diaryDate.getDate()).slice(-2);
       },
-      loadDiary() {
-        const self = this;
-        const url = 'https://pixe.la/v1/users/' + this.username
-          + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
-        const headers = {
-          'X-USER-TOKEN': this.token,
-          'accept': 'application/json',
-        };
-        axios.get(url, {headers})
-          .then((response) => {
-            self.hasError = false;
-            self.quantity = response.data.quantity;
-            self.parseOptionalData(response.data.optionalData);
-          })
-          .catch((error) => {
-            // FIXME: in case of 404, pixela don't return CORS headers.
-            // self.hasError = (!error.response || error.response.status !== 404);
-            self.quantity = '';
-            self.title = '';
-            self.body = '';
-          });
-      },
-      parseOptionalData(optionalData) {
-        try {
-          const json = JSON.parse(optionalData);
-          this.title = json.title;
-          this.body = json.body;
-        } catch (ignore) {
-          this.title = '';
-          this.body = '';
+      async loadDiary() {
+        this.quantity = '';
+        this.title = '';
+        this.body = '';
+        const res = await this.pixela.loadPixel(this.graphId, this.diaryDate);
+        // FIXME: in case of 404, pixela don't return CORS headers.
+        // this.hasError = !res;
+        if (!!res) {
+          this.quantity = res.quantity;
+          this.title = res.title;
+          this.body = res.body;
         }
       },
       saveDiary() {
@@ -151,9 +138,6 @@
             this.showErrorMessage = true;
           });
       },
-    },
-    created() {
-      this.loadDiary();
     },
     watch: {
       diaryDate(newDate, oldDate) {

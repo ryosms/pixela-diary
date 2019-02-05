@@ -1,7 +1,36 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
+
+export interface Pixel {
+  quantity: string;
+  title: string;
+  body: string;
+}
 
 export class Pixela {
   private static ENDPOINT: string = 'https://pixe.la/v1';
+
+  private static formatDateString(target: Date) {
+    return target.getFullYear()
+      + `0${target.getMonth() + 1}`.slice(-2)
+      + `0${target.getDate()}`.slice(-2);
+  }
+
+  private static parsePixel(responseData: AxiosResponse): Pixel {
+    if (responseData.status === 404) {
+      return {quantity: '', title: '', body: ''};
+    }
+    const quantity = responseData.data.quantity;
+    let title = '';
+    let body = '';
+    try {
+      const json = JSON.parse(responseData.data.optionalData);
+      title = json.title;
+      body = json.body;
+    } catch (ignore) {
+      // Pixel registered but that contains no optionalData or not json format.
+    }
+    return {quantity, title, body};
+  }
 
   constructor(private username: string, private token: string) {
   }
@@ -20,9 +49,7 @@ export class Pixela {
   }
 
   public async loadGraphSvg(graphId: string, targetDate: Date) {
-    const targetDateString = targetDate.getFullYear()
-      + `0${targetDate.getMonth() + 1}`.slice(-2)
-      + `0${targetDate.getDate()}`.slice(-2);
+    const targetDateString = Pixela.formatDateString(targetDate);
     const url = `${Pixela.ENDPOINT}/users/${this.username}/graphs/${graphId}`;
     const params = {
       date: targetDateString,
@@ -34,7 +61,24 @@ export class Pixela {
     } catch (ignore) {
       return null;
     }
+  }
 
+  public async loadPixel(graphId: string, pixelDate: Date) {
+    const targetDate = Pixela.formatDateString(pixelDate);
+    const url = `${Pixela.ENDPOINT}/users/${this.username}/graphs/${graphId}/${targetDate}`;
+    const headers = {
+      'X-USER-TOKEN': this.token,
+      'accept': 'application/json',
+    };
+    try {
+      const res = await axios.get(url, {
+        headers,
+        validateStatus: (status) => (status === 200 || status === 404),
+      });
+      return Pixela.parsePixel(res);
+    } catch (ignore) {
+      return null;
+    }
   }
 
 }
