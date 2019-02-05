@@ -1,8 +1,11 @@
 <template>
   <md-empty-state v-if="this.$store.state.graphs.length === 0"
                   class="md-accent"
-                  md-label="No Graphs." md-icon="notification_important"
-                  md-description="First, create your graph to keep a diary.">
+                  md-label="No Graphs." md-icon="notification_important">
+    <div class="md-empty-state-description">
+      <div>First, create your graph to keep a diary.</div>
+      <router-link to="/" class="md-primary">Back</router-link>
+    </div>
   </md-empty-state>
   <md-list v-else>
     <GraphListItem v-for="graph in this.$store.state.graphs"
