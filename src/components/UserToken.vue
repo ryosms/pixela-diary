@@ -61,17 +61,14 @@
       },
     },
     methods: {
-      async authentication() {
+      authentication() {
         this.isLoading = true;
-        try {
-          const res = await Pixela.authentication(this.username, this.token);
-          this.$store.commit('setGraphs', res.data.graphs);
-          this.hasError = false;
+        const graphs = Pixela.loadGraphs(this.username, this.token);
+        this.hasError = !!graphs;
+        this.isLoading = false;
+        if (graphs) {
+          this.$store.commit('setGraphs', graphs);
           this.$router.push('/graphs');
-        } catch (e) {
-          this.hasError = true;
-        } finally {
-          this.isLoading = false;
         }
       },
     },
