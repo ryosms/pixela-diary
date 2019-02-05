@@ -63,7 +63,8 @@
     methods: {
       authentication() {
         this.isLoading = true;
-        const graphs = Pixela.loadGraphs(this.username, this.token);
+        const pixela = new Pixela(this.username, this.token);
+        const graphs = pixela.loadGraphs();
         this.hasError = !!graphs;
         this.isLoading = false;
         if (graphs) {

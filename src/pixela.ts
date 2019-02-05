@@ -1,10 +1,14 @@
 import axios from 'axios';
 
 export class Pixela {
+  private static ENDPOINT: string = 'https://pixe.la/v1';
 
-  public static async loadGraphs(username: string, token: string) {
-    const url = `${Pixela.ENDPOINT}/users/${username}/graphs`;
-    const headers = {'X-USER-TOKEN': token};
+  constructor(private username: string, private token: string) {
+  }
+
+  public async loadGraphs() {
+    const url = `${Pixela.ENDPOINT}/users/${this.username}/graphs`;
+    const headers = {'X-USER-TOKEN': this.token};
 
     try {
       const res = await axios.get(url, {headers});
@@ -15,5 +19,4 @@ export class Pixela {
     }
   }
 
-  private static ENDPOINT: string = 'https://pixe.la/v1';
 }
