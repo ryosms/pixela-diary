@@ -3,14 +3,13 @@
     <span class="md-title">{{ this.$store.state.graph.name }}</span>
     <div class="md-layout">
       <md-datepicker v-model="diaryDate" md-immediately
-                     class="md-layout-item md-size-30 md-small-size-100">
+                     class="md-layout-item">
         <label>diary date</label>
       </md-datepicker>
-      <div class="md-layout-item md-size-50 md-small-100">
-        <PixelaGraph v-model="diaryDate"
-                     :username="this.$store.state.username"
-                     :graphId="this.$store.state.graph.id"/>
-      </div>
+      <PixelaGraph class="md-layout-item"
+                   v-model="diaryDate"
+                   :username="this.$store.state.username"
+                   :graphId="this.$store.state.graph.id"/>
     </div>
     <DiaryDetail v-bind:diary-date="diaryDate"
                  v-bind:graphId="this.$store.state.graph.id"
