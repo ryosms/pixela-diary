@@ -27,7 +27,7 @@
 <script>
   import Vue from 'vue';
   import {MdField, MdButton, MdSnackbar, MdProgress, MdCard} from 'vue-material/dist/components';
-  import axios from 'axios';
+  import {Pixela} from '@/pixela';
 
   Vue.use(MdField);
   Vue.use(MdButton);
@@ -40,6 +40,7 @@
     data: () => ({
       hasError: false,
       isLoading: false,
+      pixela: new Pixela(),
     }),
     computed: {
       username: {
@@ -63,8 +64,7 @@
       async authentication() {
         this.isLoading = true;
         try {
-          const res = await axios.get('https://pixe.la/v1/users/' + this.$store.state.username + '/graphs',
-            {headers: {'X-USER-TOKEN': this.$store.state.token}});
+          const res = await Pixela.authentication(this.username, this.token);
           this.$store.commit('setGraphs', res.data.graphs);
           this.hasError = false;
           this.$router.push('/graphs');
@@ -77,6 +77,3 @@
     },
   };
 </script>
-
-<style scoped>
-</style>
