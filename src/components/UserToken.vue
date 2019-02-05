@@ -67,9 +67,10 @@
         const graphs = await pixela.loadGraphs();
         this.hasError = !graphs;
         this.isLoading = false;
-        if (this.hasError) return;
-        this.$store.commit('setGraphs', graphs);
-        this.$router.push('/graphs');
+        if (!this.hasError) {
+          this.$store.commit('setGraphs', graphs);
+          this.$router.push('/graphs');
+        }
       },
     },
   };
