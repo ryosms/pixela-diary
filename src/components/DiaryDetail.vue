@@ -99,22 +99,14 @@
           this.pixel = res;
         }
       },
-      saveDiary() {
-        const diary = this.pixel.quantity ? this.pixel.quantity : '1';
-        const optionalData = {title: this.pixel.title, body: this.pixel.body};
-        const url = 'https://pixe.la/v1/users/' + this.username
-          + '/graphs/' + this.graphId + '/' + this.formatDiaryDate(this.diaryDate);
-        const headers = {
-          'X-USER-TOKEN': this.token,
-        };
-        axios.put(url, {quantity: diary, optionalData: JSON.stringify(optionalData)}, {headers})
-          .then((ignore) => {
-            this.quantity = diary;
-            this.showCompleteMessage = true;
-          })
-          .catch((ignore) => {
-            this.showErrorMessage = true;
-          });
+      async saveDiary() {
+        const res = await this.pixela.postPixel(this.graphId, this.diaryDate, this.pixel);
+        if (!res) {
+          this.showErrorMessage = true;
+        } else {
+          this.pixel = res;
+          this.showCompleteMessage = true;
+        }
       },
       deleteDiary() {
         const url = 'https://pixe.la/v1/users/' + this.username

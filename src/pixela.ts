@@ -32,6 +32,10 @@ export class Pixela {
     return {quantity, title, body};
   }
 
+  private static async stringifyOptionalData(pixel: Pixel) {
+    return await JSON.stringify({title: pixel.title, body: pixel.body});
+  }
+
   constructor(private username: string, private token: string) {
   }
 
@@ -81,4 +85,20 @@ export class Pixela {
     }
   }
 
+  public async postPixel(graphId: string, pixelDate: Date, pixelData: Pixel) {
+    const targetDate = Pixela.formatDateString(pixelDate);
+    const url = `${Pixela.ENDPOINT}/users/${this.username}/graphs/${graphId}/${targetDate}`;
+    const quantity = pixelData.quantity ? pixelData.quantity : '1';
+    const optionalData = await Pixela.stringifyOptionalData(pixelData);
+    const headers = {
+      'X-USER-TOKEN': this.token,
+    };
+
+    try {
+      await axios.put(url, {quantity, optionalData}, {headers});
+      return {quantity, title: pixelData.title, body: pixelData.body};
+    } catch (ignore) {
+      return null;
+    }
+  }
 }
