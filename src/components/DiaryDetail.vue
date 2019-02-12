@@ -87,10 +87,11 @@
       async loadDiary() {
         this.pixel = {quantity: '', title: '', body: ''};
         const res = await this.pixela.loadPixel(this.graphId, this.diaryDate);
-        // FIXME: in case of 404, pixela don't return CORS headers.
-        // this.hasError = !res;
+        this.hasError = !res;
         if (!!res) {
           this.pixel = res;
+        } else {
+          this.showErrorMessage = true;
         }
       },
       async saveDiary() {
