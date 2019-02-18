@@ -43,14 +43,11 @@
           <div class="md-layout-item md-size-50 md-small-size-100">
             <md-field>
               <label for="color">Color</label>
-              <md-select name="color" id="color">
-                <md-option></md-option>
-                <md-option value="shibafu">shibafu</md-option>
-                <md-option value="momiji">momiji</md-option>
-                <md-option value="sora">sora</md-option>
-                <md-option value="ichou">ichou</md-option>
-                <md-option value="ajisai">ajisai</md-option>
-                <md-option value="kuro">kuro</md-option>
+              <md-select v-model="selectedColor" name="color" id="color">
+                <md-option value=""></md-option>
+                <md-option v-for="color in colors" :value="color.name">
+                  {{ color.name }} ({{ color.colorName }})
+                </md-option>
               </md-select>
             </md-field>
           </div>
@@ -70,6 +67,7 @@
 <script>
   import Vue from 'vue';
   import {MdCard, MdField, MdButton, MdMenu, MdList, MdSnackbar} from 'vue-material/dist/components';
+  import {colors} from "@/pixela-colors";
 
   Vue.use(MdCard);
   Vue.use(MdField);
@@ -82,8 +80,11 @@
     name: 'CreateGraph',
     data: () => ({
       sending: false,
-    }),
-  };
+      selectedColor: '',
+      colors: colors,
+  }),
+  }
+  ;
 </script>
 
 <style scoped>
