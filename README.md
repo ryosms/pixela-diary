@@ -6,6 +6,9 @@ Keep your diary with [Pixe.la](https://pixe.la)!
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/54c43c71-f9ac-40b2-931d-17ba9cc84afe/deploy-status)](https://app.netlify.com/sites/pixela-diary/deploys)
 
+## Deploy Count
+
+[![Deploy Count](https://pixe.la/v1/users/pixela-diary/graphs/deploy)](https://pixe.la/v1/users/pixela-diary/graphs/deploy.html)
 
 ## for Developer
 
