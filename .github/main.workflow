@@ -1,8 +1,7 @@
-workflow "Post Pull Request status to Pixe.la" {
+workflow "Increment Pixela if Pull Request is opened" {
   on = "pull_request"
   resolves = [
     "increment pixe.la",
-    "decrement pixe.la",
   ]
 }
 
@@ -28,4 +27,11 @@ action "decrement pixe.la" {
   needs = ["Filter PR is closed"]
   args = ["POST", "pixe.la/v1/users/$PIXELA_USERNAME/webhooks/$PIXELA_PR_DECREMENT_HASH"]
   secrets = ["PIXELA_PR_DECREMENT_HASH", "PIXELA_USERNAME"]
+}
+
+workflow "Decrement Pixela if Pull Request is closed" {
+  on = "pull_request"
+  resolves = [
+    "decrement pixe.la",
+  ]
 }
