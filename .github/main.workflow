@@ -35,3 +35,14 @@ workflow "Decrement Pixela if Pull Request is closed" {
     "decrement pixe.la",
   ]
 }
+
+workflow "Deploy Site if release tagged" {
+  on = "release"
+  resolves = ["Post to netlify build hook"]
+}
+
+action "Post to netlify build hook" {
+  uses = "swinton/httpie.action@8ab0a0e926d091e0444fcacd5eb679d2e2d4ab3d"
+  secrets = ["NETLIFY_BUILD_HOOK_HASH"]
+  args = "[\"POST\",\"api.netlify.com/build_hooks/${NETLIFY_BUILD_HOOK_HASH}\"]"
+}
