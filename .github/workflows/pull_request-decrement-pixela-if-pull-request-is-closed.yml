@@ -1,6 +1,7 @@
 on:
   pull_request:
-    - 'closed'
+    actions:
+      - 'closed'
 name: Decrement Pixela if Pull Request is closed
 jobs:
   decrementPRIsClosed:

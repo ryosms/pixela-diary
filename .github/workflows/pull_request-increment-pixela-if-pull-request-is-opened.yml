@@ -1,7 +1,8 @@
 on:
   pull_request:
-    - 'opened'
-    - 'reopened'
+    actions:
+      - 'opened'
+      - 'reopened'
 name: Increment Pixela if Pull Request is opened
 jobs:
   incrementRPIsOpened:
