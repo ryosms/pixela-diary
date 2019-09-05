@@ -1,15 +1,12 @@
-on: pull_request
+on:
+  pull_request:
+    - 'closed'
 name: Decrement Pixela if Pull Request is closed
 jobs:
-  filterPRIsClosed:
-    name: Filter PR is closed
+  decrementPRIsClosed:
+    name: Decrement pixe.la when PR is closed.
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Filter PR is closed
-      uses: actions/bin/filter@46ffca7632504e61db2d4cb16be1e80f333cb859
-      with:
-        args: action 'closed'
     - name: decrement pixe.la
       uses: swinton/httpie.action@8ab0a0e926d091e0444fcacd5eb679d2e2d4ab3d
       env:

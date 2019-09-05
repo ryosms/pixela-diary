@@ -1,15 +1,13 @@
-on: pull_request
+on:
+  pull_request:
+    - 'opened'
+    - 'reopened'
 name: Increment Pixela if Pull Request is opened
 jobs:
-  filterPRIsOpened:
-    name: Filter PR is opened
+  incrementRPIsOpened:
+    name: Increment pixe.la when PR is opened or reopened.
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Filter PR is opened
-      uses: actions/bin/filter@46ffca7632504e61db2d4cb16be1e80f333cb859
-      with:
-        args: action 'opened|reopened'
     - name: increment pixe.la
       uses: swinton/httpie.action@8ab0a0e926d091e0444fcacd5eb679d2e2d4ab3d
       env:
