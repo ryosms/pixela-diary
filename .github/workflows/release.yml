@@ -1,0 +1,14 @@
+on: release
+name: Deploy Site if release tagged
+jobs:
+  postToNetlifyBuildHook:
+    name: Post to netlify build hook
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Post to netlify build hook
+      uses: swinton/httpie.action@8ab0a0e926d091e0444fcacd5eb679d2e2d4ab3d
+      env:
+        NETLIFY_BUILD_HOOK_HASH: ${{ secrets.NETLIFY_BUILD_HOOK_HASH }}
+      with:
+        args: '["POST","api.netlify.com/build_hooks/${NETLIFY_BUILD_HOOK_HASH}"]'
