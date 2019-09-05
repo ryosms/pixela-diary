@@ -1,6 +1,6 @@
 on:
   pull_request:
-    actions:
+    action:
       - 'opened'
       - 'reopened'
 name: Increment Pixela if Pull Request is opened
