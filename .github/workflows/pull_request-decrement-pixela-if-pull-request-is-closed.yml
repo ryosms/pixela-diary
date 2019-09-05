@@ -1,0 +1,16 @@
+on:
+  pull_request:
+name: Decrement Pixela if Pull Request is closed
+jobs:
+  decrementPRIsClosed:
+    name: Decrement pixe.la when PR is closed.
+    runs-on: ubuntu-latest
+    steps:
+    - name: decrement pixe.la
+      if: github.event.action == 'closed'
+      uses: swinton/httpie.action@8ab0a0e926d091e0444fcacd5eb679d2e2d4ab3d
+      env:
+        PIXELA_PR_DECREMENT_HASH: ${{ secrets.PIXELA_PR_DECREMENT_HASH }}
+        PIXELA_USERNAME: ${{ secrets.PIXELA_USERNAME }}
+      with:
+        args: POST pixe.la/v1/users/$PIXELA_USERNAME/webhooks/$PIXELA_PR_DECREMENT_HASH

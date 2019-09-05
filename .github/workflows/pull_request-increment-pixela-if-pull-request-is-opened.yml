@@ -1,0 +1,16 @@
+on:
+  pull_request:
+name: Increment Pixela if Pull Request is opened
+jobs:
+  incrementRPIsOpened:
+    name: Increment pixe.la when PR is opened or reopened.
+    runs-on: ubuntu-latest
+    steps:
+    - name: increment pixe.la
+      if: github.event.action == 'opened' || github.event.action == 'reopened'
+      uses: swinton/httpie.action@8ab0a0e926d091e0444fcacd5eb679d2e2d4ab3d
+      env:
+        PIXELA_PR_INCREMENT_HASH: ${{ secrets.PIXELA_PR_INCREMENT_HASH }}
+        PIXELA_USERNAME: ${{ secrets.PIXELA_USERNAME }}
+      with:
+        args: POST pixe.la/v1/users/$PIXELA_USERNAME/webhooks/$PIXELA_PR_INCREMENT_HASH
